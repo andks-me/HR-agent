@@ -75,7 +75,7 @@ defmodule HrBrandAgent.Analysis.RedFlags do
       end)
       |> Enum.reject(&(&1 == ""))
     
-    # Detect each red flag
+        # Detect each red flag
     detected_flags =
       @red_flags
       |> Enum.map(fn flag ->
