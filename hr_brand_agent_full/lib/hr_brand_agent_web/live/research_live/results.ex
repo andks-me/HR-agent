@@ -166,7 +166,7 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
             </div>
           </div>
 
-          <%!-- Hiring Funnel --%>
+         <%!-- Hiring Funnel --%>
           <div class="bg-white rounded-lg shadow">
             <div class="p-6 border-b border-gray-200">
               <h2 class="text-xl font-semibold text-gray-900">Hiring Funnel Analysis</h2>
@@ -174,18 +174,63 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
             <div class="p-6">
               <%= if @funnel do %>
                 <div class="space-y-6">
-                  <% job = @funnel[:job_descriptions] || %{} %>
                   <div>
                     <div class="flex justify-between items-center mb-2">
                       <h4 class="font-medium text-gray-900">Job Descriptions</h4>
-                      <span class="text-lg font-bold text-indigo-600"><%= format_score(job[:score]) %></span>
+                      <span class="text-lg font-bold text-indigo-600">
+                        <%= format_score(@funnel[:job_descriptions][:score]) %>
+                      </span>
                     </div>
                     <div class="text-sm text-gray-600">
-                      Clarity: <%= job[:clarity_score] || 0 %>% • 
-                      Transparency: <%= job[:transparency_score] || 0 %>% • 
-                      Attractiveness: <%= job[:attractiveness_score] || 0 %>%
+                      Clarity: <%= @funnel[:job_descriptions][:clarity_score] || 0 %>% • 
+                      Transparency: <%= @funnel[:job_descriptions][:transparency_score] || 0 %>% • 
+                      Attractiveness: <%= @funnel[:job_descriptions][:attractiveness_score] || 0 %>%
                     </div>
                   </div>
+
+                  <div>
+                    <div class="flex justify-between items-center mb-2">
+                      <h4 class="font-medium text-gray-900">Interview Experience</h4>
+                      <span class="text-lg font-bold text-indigo-600">
+                        <%= format_score(@funnel[:interview_experience][:score]) %>
+                      </span>
+                    </div>
+                    <div class="text-sm text-gray-600">
+                      Recruiter: <%= @funnel[:interview_experience][:recruiter_score] || 0 %>% • 
+                      Process: <%= @funnel[:interview_experience][:process_score] || 0 %>% • 
+                      Communication: <%= @funnel[:interview_experience][:communication_score] || 0 %>%
+                    </div>
+                    <%= if @funnel[:interview_experience][:avg_duration_days] do %>
+                      <p class="text-sm text-gray-500 mt-1">
+                        Avg. process duration: <%= @funnel[:interview_experience][:avg_duration_days] %> days
+                      </p>
+                    <% end %>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between items-center mb-2">
+                      <h4 class="font-medium text-gray-900">Employer Image</h4>
+                      <span class="text-lg font-bold text-indigo-600">
+                        <%= format_score(@funnel[:employer_image][:score]) %>
+                      </span>
+                    </div>
+                    <%= if length(@funnel[:employer_image][:attractors] || []) > 0 do %>
+                      <div class="flex flex-wrap gap-2 mt-2">
+                        <%= for attractor <- @funnel[:employer_image][:attractors] || [] do %>
+                          <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            <%= attractor %>
+                          </span>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              <% else %>
+                <p class="text-gray-500">Funnel analysis not yet complete</p>
+              <% end %>
+            </div>
+          </div>
+
 
                   <% interview = @funnel[:interview_experience] || %{} %>
                   <div>
