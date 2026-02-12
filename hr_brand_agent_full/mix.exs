@@ -42,7 +42,6 @@ defmodule HrBrandAgent.MixProject do
       {:ecto_sqlite3, "~> 0.17"},
 
       # Authentication
-      {:phx_gen_auth, "~> 0.7.0", only: [:dev], runtime: false},
       {:bcrypt_elixir, "~> 3.0"},
 
       # HTTP & API
