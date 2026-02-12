@@ -12,7 +12,7 @@ defmodule HrBrandAgent.Storage.Cloud do
     
     unless bucket do
       Logger.warning("S3 bucket not configured, skipping cloud upload")
-      return {:ok, :skipped}
+      {:ok, :skipped}
     end
     
     # Read file
@@ -50,7 +50,7 @@ defmodule HrBrandAgent.Storage.Cloud do
     bucket = Application.get_env(:ex_aws, :s3)[:bucket]
     
     unless bucket do
-      return {:error, :not_configured}
+      {:error, :not_configured}
     end
     
     result = ExAws.S3.get_object(bucket, remote_path)
@@ -73,7 +73,7 @@ defmodule HrBrandAgent.Storage.Cloud do
     bucket = Application.get_env(:ex_aws, :s3)[:bucket]
     
     unless bucket do
-      return {:error, :not_configured}
+      {:error, :not_configured}
     end
     
     # Generate presigned URL
@@ -95,7 +95,7 @@ defmodule HrBrandAgent.Storage.Cloud do
     bucket = Application.get_env(:ex_aws, :s3)[:bucket]
     
     unless bucket do
-      return {:ok, []}
+      {:ok, []}
     end
     
     result = ExAws.S3.list_objects(bucket, prefix: prefix)
@@ -125,7 +125,7 @@ defmodule HrBrandAgent.Storage.Cloud do
     bucket = Application.get_env(:ex_aws, :s3)[:bucket]
     
     unless bucket do
-      return {:ok, :skipped}
+      {:ok, :skipped}
     end
     
     ExAws.S3.delete_object(bucket, remote_path)
