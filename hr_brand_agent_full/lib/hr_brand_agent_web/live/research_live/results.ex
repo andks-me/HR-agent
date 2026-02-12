@@ -7,13 +7,12 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
   @impl true
   def mount(%{"id" => session_id}, _session, socket) do
     session = Research.get_session!(session_id)
-    
-    # Load all analysis results
+
     sentiment_result = get_analysis_result(session_id, "sentiment")
     funnel_result = get_analysis_result(session_id, "funnel")
     red_flags_result = get_analysis_result(session_id, "red_flags")
     competitors_result = get_analysis_result(session_id, "competitors")
-    
+
     socket =
       socket
       |> assign(:page_title, "Research Results - #{session.company.name}")
@@ -40,7 +39,10 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
                 ← Back to Dashboard
               </.link>
               <h1 class="mt-2 text-3xl font-bold text-gray-900"><%= @company.name %></h1>
-              <p class="mt-1 text-gray-600"><%= @company.industry %> • Research completed <%= format_date(@session.completed_at || @session.inserted_at) %></p>
+              <p class="mt-1 text-gray-600">
+                <%= @company.industry %> •
+                Research completed <%= format_date(@session.completed_at || @session.inserted_at) %>
+              </p>
             </div>
             <div class="flex space-x-3">
               <button
@@ -142,12 +144,12 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
               <%= if @red_flags && length(@red_flags[:flags] || []) > 0 do %>
                 <div class="space-y-4">
                   <%= for flag <- (@red_flags[:flags] || []) do %>
-                    <div class="flex items-start space-x-3 p-4 rounded-lg <%= severity_bg_class(flag.severity) %>">
+                    <div class={"flex items-start space-x-3 p-4 rounded-lg #{severity_bg_class(flag.severity)}"}>
                       <div class="flex-shrink-0">
                         <.icon name="hero-exclamation-triangle" class={"w-5 h-5 #{severity_text_class(flag.severity)}"} />
                       </div>
                       <div class="flex-1">
-                        <h4 class="font-medium <%= severity_text_class(flag.severity) %>"><%= flag.flag_name %></h4>
+                        <h4 class={"font-medium #{severity_text_class(flag.severity)}"}><%= flag.flag_name %></h4>
                         <p class="text-sm text-gray-600 mt-1"><%= flag.description %></p>
                         <p class="text-xs text-gray-500 mt-2">Mentioned <%= flag.frequency %> times</p>
                       </div>
@@ -166,7 +168,7 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
             </div>
           </div>
 
-         <%!-- Hiring Funnel --%>
+          <%!-- Hiring Funnel --%>
           <div class="bg-white rounded-lg shadow">
             <div class="p-6 border-b border-gray-200">
               <h2 class="text-xl font-semibold text-gray-900">Hiring Funnel Analysis</h2>
@@ -182,8 +184,8 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
                       </span>
                     </div>
                     <div class="text-sm text-gray-600">
-                      Clarity: <%= @funnel[:job_descriptions][:clarity_score] || 0 %>% • 
-                      Transparency: <%= @funnel[:job_descriptions][:transparency_score] || 0 %>% • 
+                      Clarity: <%= @funnel[:job_descriptions][:clarity_score] || 0 %>% •
+                      Transparency: <%= @funnel[:job_descriptions][:transparency_score] || 0 %>% •
                       Attractiveness: <%= @funnel[:job_descriptions][:attractiveness_score] || 0 %>%
                     </div>
                   </div>
@@ -196,8 +198,8 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
                       </span>
                     </div>
                     <div class="text-sm text-gray-600">
-                      Recruiter: <%= @funnel[:interview_experience][:recruiter_score] || 0 %>% • 
-                      Process: <%= @funnel[:interview_experience][:process_score] || 0 %>% • 
+                      Recruiter: <%= @funnel[:interview_experience][:recruiter_score] || 0 %>% •
+                      Process: <%= @funnel[:interview_experience][:process_score] || 0 %>% •
                       Communication: <%= @funnel[:interview_experience][:communication_score] || 0 %>%
                     </div>
                     <%= if @funnel[:interview_experience][:avg_duration_days] do %>
@@ -231,46 +233,6 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
             </div>
           </div>
 
-
-                  <% interview = @funnel[:interview_experience] || %{} %>
-                  <div>
-                    <div class="flex justify-between items-center mb-2">
-                      <h4 class="font-medium text-gray-900">Interview Experience</h4>
-                      <span class="text-lg font-bold text-indigo-600"><%= format_score(interview[:score]) %></span>
-                    </div>
-                    <div class="text-sm text-gray-600">
-                      Recruiter: <%= interview[:recruiter_score] || 0 %>% • 
-                      Process: <%= interview[:process_score] || 0 %>% • 
-                      Communication: <%= interview[:communication_score] || 0 %>%
-                    </div>
-                    <%= if interview[:avg_duration_days] do %>
-                      <p class="text-sm text-gray-500 mt-1">Avg. process duration: <%= interview[:avg_duration_days] %> days</p>
-                    <% end %>
-                  </div>
-
-                  <% image = @funnel[:employer_image] || %{} %>
-                  <div>
-                    <div class="flex justify-between items-center mb-2">
-                      <h4 class="font-medium text-gray-900">Employer Image</h4>
-                      <span class="text-lg font-bold text-indigo-600"><%= format_score(image[:score]) %></span>
-                    </div>
-                    <%= if length(image[:attractors] || []) > 0 do %>
-                      <div class="flex flex-wrap gap-2 mt-2">
-                        <%= for attractor <- image[:attractors] || [] do %>
-                          <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            <%= attractor %>
-                          </span>
-                        <% end %>
-                      </div>
-                    <% end %>
-                  </div>
-                </div>
-              <% else %>
-                <p class="text-gray-500">Funnel analysis not yet complete</p>
-              <% end %>
-            </div>
-          </div>
-
           <%!-- Competitor Comparison --%>
           <div class="bg-white rounded-lg shadow">
             <div class="p-6 border-b border-gray-200">
@@ -281,7 +243,9 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
                 <div class="space-y-4">
                   <div class="flex justify-between items-center p-4 bg-indigo-50 rounded-lg">
                     <span class="font-medium text-indigo-900">Market Position</span>
-                    <span class="text-lg font-bold text-indigo-600"><%= @competitors[:market_position] || "Unknown" %></span>
+                    <span class="text-lg font-bold text-indigo-600">
+                      <%= @competitors[:market_position] || "Unknown" %>
+                    </span>
                   </div>
 
                   <%= if length(@competitors[:competitive_advantages] || []) > 0 do %>
@@ -366,7 +330,9 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
   # Private functions
   defp get_analysis_result(session_id, analysis_type) do
     case Analysis.list_results(session_id) do
-      [] -> nil
+      [] ->
+        nil
+
       results ->
         case Enum.find(results, &(&1.analysis_type == analysis_type)) do
           nil -> nil
@@ -376,6 +342,7 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
   end
 
   defp format_date(nil), do: "N/A"
+
   defp format_date(datetime) do
     Calendar.strftime(datetime, "%B %d, %Y")
   end
@@ -406,18 +373,18 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
 
   defp has_recommendations?(red_flags, funnel) do
     length(red_flags[:recommendations] || []) > 0 or
-    length(funnel[:job_descriptions][:recommendations] || []) > 0
+      length(funnel[:job_descriptions][:recommendations] || []) > 0
   end
 
   @impl true
   def handle_event("export_csv", _params, socket) do
-    # Trigger CSV export
-    {:noreply, put_flash(socket, :info, "CSV export started. You will receive an email when ready.")}
+    {:noreply,
+     put_flash(socket, :info, "CSV export started. You will receive an email when ready.")}
   end
 
   @impl true
   def handle_event("export_pdf", _params, socket) do
-    # Trigger PDF export
-    {:noreply, put_flash(socket, :info, "PDF export started. You will receive an email when ready.")}
+    {:noreply,
+     put_flash(socket, :info, "PDF export started. You will receive an email when ready.")}
   end
 end
