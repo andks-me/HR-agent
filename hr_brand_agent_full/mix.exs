@@ -57,7 +57,7 @@ defmodule HrBrandAgent.MixProject do
       {:crawly, "~> 0.16"},
       {:floki, "~> 0.35"},
 
-      # Sentiment Analysis
+      # Sentiment Analysis (disabled)
       {:veritaserum, "~> 0.2.2"},
       {:bumblebee, "~> 0.6.0"},
       {:exla, ">= 0.0.0"},
