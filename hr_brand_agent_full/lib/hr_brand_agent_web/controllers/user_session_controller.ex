@@ -2,15 +2,20 @@ defmodule HrBrandAgentWeb.UserSessionController do
   use HrBrandAgentWeb, :controller
 
   alias HrBrandAgent.Accounts
+  alias HrBrandAgent.Accounts.User
+  alias HrBrandAgent.Accounts.UserToken
+  alias HrBrandAgentWeb.UserAuth
 
   def create(conn, %{"user" => %{"email" => email, "password" => password}}) do
     case Accounts.authenticate_user(email, password) do
-      {:ok, user} ->
+      {:ok, %User{} = user} ->
+        {:ok, token} = Accounts.create_user_session_token(user)
+
         conn
         |> put_flash(:info, "Welcome back!")
-        |> put_session(:user_token, generate_user_token(user))
+        |> put_session(:user_token, token)
         |> redirect(to: ~p"/dashboard")
-      
+
       {:error, :invalid_credentials} ->
         conn
         |> put_flash(:error, "Invalid email or password")
@@ -19,14 +24,14 @@ defmodule HrBrandAgentWeb.UserSessionController do
   end
 
   def delete(conn, _params) do
+    if token = get_session(conn, :user_token) do
+      Accounts.delete_user_session_token(token)
+    end
+
     conn
+    |> configure_session(drop: true)
     |> put_flash(:info, "Logged out successfully.")
-    |> delete_session(:user_token)
     |> redirect(to: ~p"/")
   end
-
-  defp generate_user_token(user) do
-    # Simple token generation - in production use a proper token library
-    :crypto.strong_rand_bytes(32) |> Base.encode64()
-  end
 end
+
