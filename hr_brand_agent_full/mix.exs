@@ -50,7 +50,7 @@ defmodule HrBrandAgent.MixProject do
       {:httpoison, "~> 2.0"},
 
       # Telegram
-      {:telegex, "~> 1.9.0-rc.0"},
+      # {:telegex, "~> 1.9.0-rc.0"},
 
       # Web Scraping
       {:hound, "~> 1.1"},
