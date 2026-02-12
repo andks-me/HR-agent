@@ -76,9 +76,11 @@ defmodule HrBrandAgent.Analysis.RedFlags do
       |> Enum.reject(&(&1 == ""))
     
     # Detect each red flag
-    detected_flags = 
+    detected_flags =
       @red_flags
-      |> Enum.map(fn flag -> detect_flag(flag, texts, all_data)end)
+      |> Enum.map(fn flag ->
+        detect_flag(flag, texts, all_data)
+      end)
       |> Enum.filter(fn flag -> flag.frequency > 0 end)
       |> Enum.sort_by(& &1.frequency, :desc)
     
