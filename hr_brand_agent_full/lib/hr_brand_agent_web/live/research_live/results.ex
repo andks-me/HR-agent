@@ -69,7 +69,7 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
           <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div class="text-center">
-                <div class="text-3xl font-bold <%= sentiment_color_class(@sentiment[:overall][:average_percentages][:positive]) %>">
+                <div class={"text-3xl font-bold #{sentiment_color_class(@sentiment[:overall][:average_percentages][:positive])}"}>
                   <%= format_percentage(@sentiment[:overall][:average_percentages][:positive]) %>
                 </div>
                 <div class="text-sm text-gray-600 mt-1">Positive Sentiment</div>
@@ -81,7 +81,7 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
                 <div class="text-sm text-gray-600 mt-1">Hiring Funnel Score</div>
               </div>
               <div class="text-center">
-                <div class="text-3xl font-bold <%= if (@red_flags[:total_flags_detected] || 0) > 0, do: "text-red-600", else: "text-green-600" %>">
+                <div class={"text-3xl font-bold #{if (@red_flags[:total_flags_detected] || 0) > 0, do: "text-red-600", else: "text-green-600"}"}>
                   <%= @red_flags[:total_flags_detected] || 0 %>
                 </div>
                 <div class="text-sm text-gray-600 mt-1">Red Flags</div>
