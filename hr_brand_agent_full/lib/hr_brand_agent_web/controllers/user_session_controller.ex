@@ -14,12 +14,12 @@ defmodule HrBrandAgentWeb.UserSessionController do
         conn
         |> put_flash(:info, "Welcome back!")
         |> put_session(:user_token, token)
-        |> redirect(to: ~p"/dashboard")
+        |> redirect(to: "/dashboard")
 
       {:error, :invalid_credentials} ->
         conn
         |> put_flash(:error, "Invalid email or password")
-        |> redirect(to: ~p"/users/log_in")
+        |> redirect(to: "/users/log_in")
     end
   end
 
@@ -31,7 +31,7 @@ defmodule HrBrandAgentWeb.UserSessionController do
     conn
     |> configure_session(drop: true)
     |> put_flash(:info, "Logged out successfully.")
-    |> redirect(to: ~p"/")
+    |> redirect(to: "/")
   end
 end
 
