@@ -98,7 +98,7 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
           </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <%!-- Sentiment Analysis --%>
           <div class="bg-white rounded-lg shadow">
             <div class="p-6 border-b border-gray-200">
@@ -120,4 +120,17 @@ defmodule HrBrandAgentWeb.ResearchLive.Results do
                       <div class="text-gray-500">LinkedIn</div>
                     </div>
                     <div class="text-center p-3 bg-gray-50 rounded">
-                      <div cla
+                      <div class="font-medium"><%= get_in(@sentiment, [:by_source, :telegram, :total_analyzed]) || 0 %></div>
+                      <div class="text-gray-500">Telegram</div>
+                    </div>
+                    <div class="text-center p-3 bg-gray-50 rounded">
+                      <div class="font-medium"><%= get_in(@sentiment, [:by_source, :web, :total_analyzed]) || 0 %></div>
+                      <div class="text-gray-500">Web Reviews</div>
+                    </div>
+                  </div>
+                </div>
+              <% else %>
+                <p class="text-gray-500">Sentiment analysis not yet complete</p>
+              <% end %>
+            </div>
+          </div>
